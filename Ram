@@ -1,0 +1,62 @@
+import logging
+import telegram
+from telegram.ext import Updater, CommandHandler
+
+# Replace 'YOUR_BOT_TOKEN' with your actual bot token obtained from BotFather
+BOT_TOKEN = '6532776426:AAGr3syiLLb629AigmvRUKMPw3Q1mKITBpE'
+
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+# Create a Telegram bot object
+bot = telegram.Bot(token=BOT_TOKEN)
+
+# Define some predefined responses
+responses = {
+    "/start": "Hello! I am your Telegram bot. Type /help to see the list of commands.",
+    "/help": "You can use the following commands:\n"
+             "/start - Start the bot\n"
+             "/help - Show this help message\n"
+             "/info - Show bot information\n"
+             "/status - Show bot status",
+    "/info": "This bot is powered by ChatGPT, a language model by OpenAI.",
+    "/status": "The bot is running smoothly!",
+}
+
+# Handler for /start command
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=responses["/start"])
+
+# Handler for /help command
+def help(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=responses["/help"])
+
+# Handler for /info command
+def info(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=responses["/info"])
+
+# Handler for /status command
+def status(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=responses["/status"])
+
+def main():
+    # Create the Updater and pass it your bot's token.
+    updater = Updater(BOT_TOKEN)
+
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
+
+    # Add command handlers
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("info", info))
+    dp.add_handler(CommandHandler("status", status))
+
+    # Start the Bot
+    updater.start_polling()
+
+    # Run the bot until you press Ctrl-C
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
